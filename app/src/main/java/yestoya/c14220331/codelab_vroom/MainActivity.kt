@@ -85,8 +85,6 @@ class MainActivity : AppCompatActivity() {
                             val daftar = DB.funDaftarBelanjaDAO().selectAll()
                             adapterDaftar.isiData(daftar)
                         }
-
-
                     }
                 }
             }

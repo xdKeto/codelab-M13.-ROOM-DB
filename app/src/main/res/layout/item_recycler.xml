@@ -52,10 +52,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/edit"
-        android:backgroundTint="#2c9c49"
+        android:backgroundTint="#ebd334"
         app:layout_constraintEnd_toStartOf="@id/delBTN"
         app:layout_constraintTop_toTopOf="@id/delBTN"
         app:layout_constraintBottom_toBottomOf="@id/delBTN"
+        android:layout_marginEnd="8dp"/>
+
+    <ImageButton
+        android:id="@+id/checkBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/check"
+        android:backgroundTint="#2c9c49"
+        app:layout_constraintEnd_toStartOf="@id/editBTN"
+        app:layout_constraintTop_toTopOf="@id/editBTN"
+        app:layout_constraintBottom_toBottomOf="@id/editBTN"
         android:layout_marginEnd="8dp"/>
 
 

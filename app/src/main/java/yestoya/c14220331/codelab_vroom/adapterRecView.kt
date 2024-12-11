@@ -16,6 +16,8 @@ class adapterRecView (private val daftarBelanja : MutableList<daftarBelanja>):
 
     interface OnItemClickCallback {
         fun delData(dtBelanja: daftarBelanja)
+
+        fun checkData(dtBelanja: daftarBelanja)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -29,6 +31,7 @@ class adapterRecView (private val daftarBelanja : MutableList<daftarBelanja>):
 
         var _btnEdit = itemView.findViewById<ImageButton>(R.id.editBTN)
         var _btnDelete = itemView.findViewById<ImageButton>(R.id.delBTN)
+        var _btnCheck = itemView.findViewById<ImageButton>(R.id.checkBTN)
     }
 
     override fun onCreateViewHolder(
@@ -62,6 +65,11 @@ class adapterRecView (private val daftarBelanja : MutableList<daftarBelanja>):
 
         holder._btnDelete.setOnClickListener {
             onItemClickCallback.delData(daftar)
+        }
+
+        holder._btnCheck.setOnClickListener {
+            onItemClickCallback.checkData(daftar)
+
         }
 
     }

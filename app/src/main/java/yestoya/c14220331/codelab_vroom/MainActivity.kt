@@ -16,9 +16,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import yestoya.c14220331.codelab_vroom.database.daftarBelanja
 import yestoya.c14220331.codelab_vroom.database.daftarBelanjaDB
+import yestoya.c14220331.codelab_vroom.database.historyBarang
+import yestoya.c14220331.codelab_vroom.database.historyBarangDB
 
 class MainActivity : AppCompatActivity() {
     private lateinit var DB: daftarBelanjaDB
+
+    private lateinit var historyDB : historyBarangDB
 
     private lateinit var adapterDaftar : adapterRecView
 
@@ -34,18 +38,22 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+
+
         adapterDaftar = adapterRecView(arDaftar)
         var rvDaftar = findViewById<RecyclerView>(R.id.rvNotes)
         rvDaftar.layoutManager = LinearLayoutManager(this)
         rvDaftar.adapter = adapterDaftar
 
         DB = daftarBelanjaDB.getDatabase(this)
+        historyDB = historyBarangDB.getDatabase(this)
 
         val addBTN = findViewById<FloatingActionButton>(R.id.addBTN)
         addBTN.setOnClickListener {
             val intent = Intent(this, TambahDaftar::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_ADD_EDIT)
         }
+
 
         adapterDaftar.setOnItemClickCallback(
             object : adapterRecView.OnItemClickCallback {
@@ -56,6 +64,29 @@ class MainActivity : AppCompatActivity() {
                         withContext(Dispatchers.Main){
                             adapterDaftar.isiData(daftar)
                         }
+                    }
+                }
+
+                override fun checkData(dtBelanja: daftarBelanja) {
+                    CoroutineScope(Dispatchers.IO).async {
+                        val jumlahInt = dtBelanja.jumlah?.toInt() ?: 0
+
+                        DB.funDaftarBelanjaDAO().updateStatus(dtBelanja.id, 1)
+                        historyDB.funHistoryBarangDAO().insert(historyBarang(
+                            tanggal = dtBelanja.tanggal,
+                            item = dtBelanja.item,
+                            jumlah = jumlahInt.toString(),
+                            status = 1
+                        ))
+
+                        DB.funDaftarBelanjaDAO().delete(dtBelanja)
+
+                        withContext(Dispatchers.Main) {
+                            val daftar = DB.funDaftarBelanjaDAO().selectAll()
+                            adapterDaftar.isiData(daftar)
+                        }
+
+
                     }
                 }
             }
@@ -69,4 +100,21 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_ADD_EDIT && resultCode == RESULT_OK) {
+            CoroutineScope(Dispatchers.Main).async {
+                val daftarBelanja = DB.funDaftarBelanjaDAO().selectAll()
+                adapterDaftar.isiData(daftarBelanja) // Refresh data
+            }
+        }
+    }
+
+    companion object {
+        const val REQUEST_CODE_ADD_EDIT = 1
+    }
+
+
 }
+

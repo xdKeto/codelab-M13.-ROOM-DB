@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import yestoya.c14220331.codelab_vroom.database.daftarBelanja
 import yestoya.c14220331.codelab_vroom.database.daftarBelanjaDB
 import yestoya.c14220331.codelab_vroom.helper.DateHelper.getCurrentDate
@@ -48,6 +49,10 @@ class TambahDaftar : AppCompatActivity() {
 
                     )
                 )
+                withContext(Dispatchers.Main) {
+                    setResult(RESULT_OK)
+                    finish()
+                }
             }
         }
 
@@ -61,7 +66,7 @@ class TambahDaftar : AppCompatActivity() {
         } else {
             btnTambah.visibility = View.GONE
             btnUpdate.visibility = View.VISIBLE
-            etItem.isEnabled = falsex
+            etItem.isEnabled = false
 
             CoroutineScope(Dispatchers.IO).async {
                 val item = DB.funDaftarBelanjaDAO().getItem(iID)
@@ -79,6 +84,10 @@ class TambahDaftar : AppCompatActivity() {
                     isi_status = 0,
                     pilihid = iID
                 )
+                withContext(Dispatchers.Main) {
+                    setResult(RESULT_OK)
+                    finish()
+                }
             }
         }
 

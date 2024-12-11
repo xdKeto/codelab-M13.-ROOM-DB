@@ -61,7 +61,7 @@ class TambahDaftar : AppCompatActivity() {
         } else {
             btnTambah.visibility = View.GONE
             btnUpdate.visibility = View.VISIBLE
-            etItem.isEnabled = falsex
+            etItem.isEnabled = false
 
             CoroutineScope(Dispatchers.IO).async {
                 val item = DB.funDaftarBelanjaDAO().getItem(iID)
